@@ -8,8 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,70 +30,110 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             Fair2Theme {
+                val selectedItem = remember {
+                    mutableStateOf("Самара")
+                }
                 WeatherContent(
                     localTime = "8:14",
                     windSpeed = 4.5,
                     airPressure = 759,
-                    humidity = 42
+                    humidity = 42,
+                    selectedItem = selectedItem.value,
+                    items = listOf("Самара", "Москва", "Владивосток"),
+                    onSelect = { selectedItem.value = it }
                 )
             }
         }
     }
 }
 
+
 @Preview
 @Composable
 fun WeatherContentPreview(){
     Surface(color = Color.White) {
+        val selectedItem = remember {
+            mutableStateOf("Самара")
+        }
+
       WeatherContent(
           localTime = "8:14",
           windSpeed = 4.5,
           airPressure = 759,
-          humidity = 42
+          humidity = 42,
+          selectedItem = selectedItem.value,
+          items = listOf("Самара", "Москва", "Владивосток"),
+          onSelect = { selectedItem.value = it }
       )
     }
 }
 
-@OptIn( ExperimentalMaterialApi::class)
-@Composable
-fun MenuCity(
-    modifier: Modifier = Modifier,
-    selectedItem: String,
-    items: List<String>,
-    onSelect: (String) -> Unit
-) {
-
-    val isExpanded = remember {
-        mutableStateOf(false)
-    }
-    ExposedDropdownMenuBox(
-        modifier = modifier,
-        expanded = isExpanded.value,
-        onExpandedChange = { isExpanded.value = it },
-        content = {
-            Text(
-                text = selectedItem,
-                modifier = Modifier
-                    .fillMaxWidth()
-
-            )
-        }
-    )
-}
-
-
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WeatherContent(
+    modifier: Modifier = Modifier,
     localTime: String,
     windSpeed: Double,
     airPressure: Int,
-    humidity: Int
+    humidity: Int,
+    selectedItem: String,
+    items: List<String>,
+    onSelect: (String) -> Unit
 ){
+
 
     Scaffold(
         topBar = {
-
+            val isExpanded = remember {
+                mutableStateOf(false)
+            }
+            ExposedDropdownMenuBox(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(24.dp,22.dp)
+                    .background(
+                        color = Color.Black.copy(0.05f),
+                        shape = RoundedCornerShape(12.dp)
+                    ),
+                expanded = isExpanded.value,
+                onExpandedChange = { isExpanded.value = it },
+                content = {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp, 9.dp)
+                            .menuAnchor(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = selectedItem,
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Medium,
+                            fontFamily = FontFamily(listOf(Font(R.font.montserrat_semibold))),
+                            modifier = Modifier
+                        )
+                        ExposedDropdownMenuDefaults.TrailingIcon(
+                            modifier = Modifier,
+                            expanded = isExpanded.value
+                        )
+                    }
+                    ExposedDropdownMenu(
+                        expanded = isExpanded.value,
+                        onDismissRequest = { isExpanded.value = false }
+                    ) {
+                        items.forEach { item ->
+                            DropdownMenuItem(
+                                text = { Text(text = item) },
+                                onClick = {
+                                    onSelect(item)
+                                    isExpanded.value = false
+                                }
+                            )
+                        }
+                    }
+                }
+            )
         },
 
         bottomBar = {
@@ -133,9 +172,16 @@ fun WeatherContent(
                 }
             }
         }
-    )
-    {
+    ) {
+Box(
+    modifier = Modifier
+        .padding(it)
+        .fillMaxSize()
+        .background(color = Color.Black),
 
+){
+Column() {  }
+}
     }
 
 }
