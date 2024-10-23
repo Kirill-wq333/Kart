@@ -71,35 +71,38 @@ fun WeatherContent(
 
     Scaffold(
         topBar = {
-            Row(
+            Box(
                 modifier = Modifier
                     .padding(24.dp, 22.dp)
-                    .width(327.dp)
-                    .height(40.dp)
+                    .fillMaxWidth()
                     .background(
                         color = Color.Black.copy(0.05f),
                         shape = RoundedCornerShape(12.dp)
                     ),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ){
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp, 10.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Text(
-                        modifier = Modifier
-                            .padding(10.dp, 9.dp),
                         text = "Москва",
                         fontWeight = FontWeight.Medium,
                         fontFamily = FontFamily(listOf(Font(R.font.montserrat_medium)))
                     )
-                Icon(
-                    modifier = Modifier
-                        .padding(10.dp, 8.dp)
-                        .size(24.dp),
-                    imageVector = ImageVector.vectorResource(id = R.drawable.chevron_down),
-                    contentDescription = null
+                    Icon(
+                        modifier = Modifier
+                            .size(24.dp),
+                        imageVector = ImageVector.vectorResource(id = R.drawable.chevron_down),
+                        contentDescription = null
 
-                )
+                    )
+                }
             }
         },
+
         bottomBar = {
             Box(
                 modifier = Modifier
