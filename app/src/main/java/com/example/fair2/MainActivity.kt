@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.DeadObjectException
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -35,6 +37,8 @@ class MainActivity : ComponentActivity() {
                 }
                 WeatherContent(
                     localTime = "8:14",
+                    temperature = "31",
+                    nameWeather = "Облачно",
                     windSpeed = 4.5,
                     airPressure = 759,
                     humidity = 42,
@@ -58,6 +62,8 @@ fun WeatherContentPreview(){
 
       WeatherContent(
           localTime = "8:14",
+          temperature = "31",
+          nameWeather = "Облачно",
           windSpeed = 4.5,
           airPressure = 759,
           humidity = 42,
@@ -73,6 +79,8 @@ fun WeatherContentPreview(){
 fun WeatherContent(
     modifier: Modifier = Modifier,
     localTime: String,
+    temperature: String,
+    nameWeather: String,
     windSpeed: Double,
     airPressure: Int,
     humidity: Int,
@@ -173,17 +181,46 @@ fun WeatherContent(
             }
         }
     ) {
-Box(
-    modifier = Modifier
-        .padding(it)
-        .fillMaxSize()
-        .background(color = Color.Black),
-
-){
-Column() {  }
-}
+        Box(
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ){
+    Column(
+        modifier = Modifier,
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.partly_cloudy_day),
+            contentDescription = null
+        )
+        Text(
+            text = nameWeather,
+            fontWeight = FontWeight.Medium,
+            fontFamily = FontFamily(listOf(Font(R.font.montserrat_medium)))
+        )
+        Row(
+            modifier = Modifier
+                .padding(27.dp, 0.dp),
+            verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Text(
+                text = temperature,
+                fontSize = 40.sp,
+                fontWeight = FontWeight.SemiBold,
+                fontFamily = FontFamily(listOf(Font(R.font.montserrat_semibold)))
+            )
+            Image(
+                painter = painterResource(id = R.drawable.ellipse_1),
+                contentDescription = null,
+            )
+            }
+        }
+      }
     }
-
 }
 @Composable
 fun DetailsTextBlock(
