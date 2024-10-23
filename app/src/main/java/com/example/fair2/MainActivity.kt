@@ -9,6 +9,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -54,6 +55,33 @@ fun WeatherContentPreview(){
     }
 }
 
+@OptIn( ExperimentalMaterialApi::class)
+@Composable
+fun MenuCity(
+    modifier: Modifier = Modifier,
+    selectedItem: String,
+    items: List<String>,
+    onSelect: (String) -> Unit
+) {
+
+    val isExpanded = remember {
+        mutableStateOf(false)
+    }
+    ExposedDropdownMenuBox(
+        modifier = modifier,
+        expanded = isExpanded.value,
+        onExpandedChange = { isExpanded.value = it },
+        content = {
+            Text(
+                text = selectedItem,
+                modifier = Modifier
+                    .fillMaxWidth()
+
+            )
+        }
+    )
+}
+
 
 
 @Composable
@@ -66,36 +94,7 @@ fun WeatherContent(
 
     Scaffold(
         topBar = {
-            Box(
-                modifier = Modifier
-                    .padding(24.dp, 22.dp)
-                    .fillMaxWidth()
-                    .background(
-                        color = Color.Black.copy(0.05f),
-                        shape = RoundedCornerShape(12.dp)
-                    ),
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp, 10.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "Москва",
-                        fontWeight = FontWeight.Medium,
-                        fontFamily = FontFamily(listOf(Font(R.font.montserrat_medium)))
-                    )
-                    Icon(
-                        modifier = Modifier
-                            .size(24.dp),
-                        imageVector = ImageVector.vectorResource(id = R.drawable.chevron_down),
-                        contentDescription = null
 
-                    )
-                }
-            }
         },
 
         bottomBar = {
@@ -134,7 +133,8 @@ fun WeatherContent(
                 }
             }
         }
-    ) {
+    )
+    {
 
     }
 
