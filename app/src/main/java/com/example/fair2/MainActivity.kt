@@ -55,11 +55,6 @@ fun WeatherContentPreview(){
 }
 
 
-fun getCurrentTime(): String {
-    val format = SimpleDateFormat("HH:mm", Locale.getDefault())
-    return format.format(Date())
-}
-
 
 @Composable
 fun WeatherContent(
@@ -120,8 +115,9 @@ fun WeatherContent(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    DetailsTextBlock2(
-                        title = "Время"
+                    DetailsTextBlock(
+                        title = "Время",
+                        subtitle = "$localTime"
                     )
                     DetailsTextBlock(
                         title = "Ск. ветра",
@@ -169,38 +165,3 @@ fun DetailsTextBlock(
     }
 }
 
-@Composable
-fun DetailsTextBlock2(
-    title: String
-) {
-    var currentTime by remember {
-        mutableStateOf(getCurrentTime())
-    }
-
-    LaunchedEffect(Unit) {
-        while (true) {
-            delay(1000) // Обновляем каждую секунду
-            currentTime = getCurrentTime()
-        }
-    }
-
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        Text(
-            text = title,
-            fontSize = 12.sp,
-            fontWeight = FontWeight.SemiBold,
-            color = Color.Black.copy(0.7f),
-            fontFamily = FontFamily(listOf(Font(R.font.montserrat_semibold)))
-        )
-        Text(
-            text = currentTime,
-            fontSize = 15.sp,
-            fontWeight = FontWeight.Medium,
-            color = Color.Black,
-            fontFamily = FontFamily(listOf(Font(R.font.montserrat_medium)))
-        )
-    }
-}
