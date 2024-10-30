@@ -14,6 +14,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
@@ -25,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.fair2.ui.theme.Fair2Theme
+import com.skydoves.cloudy.cloudy
 import kotlinx.coroutines.delay
 import java.util.*
 
@@ -96,14 +98,15 @@ fun WeatherContent(
         ) {
             Box(
                 modifier = Modifier
+                    .blur(50.dp)
+                    .padding(50.dp)
+                    .fillMaxHeight(0.6f)
+                    .fillMaxWidth(1f)
                     .background(
                         Color(0xFF9BB7F2).copy(0.7f),
                         CircleShape
                     )
-                    .fillMaxHeight(0.4f)
-                    .fillMaxWidth(0.6f)
-            ) {
-            }
+            )
             Column(
                 modifier = Modifier,
                 verticalArrangement = Arrangement.Center,
