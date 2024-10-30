@@ -100,7 +100,7 @@ fun WeatherContent(
                 modifier = Modifier
                     .blur(50.dp)
                     .padding(50.dp)
-                    .fillMaxHeight(0.6f)
+                    .fillMaxHeight(0.5f)
                     .fillMaxWidth(1f)
                     .background(
                         Color(0xFF9BB7F2).copy(0.7f),
