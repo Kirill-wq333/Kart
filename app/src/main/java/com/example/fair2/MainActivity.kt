@@ -116,6 +116,7 @@ fun WeatherContent(
                 Text(
                     text = nameWeather,
                     fontSize = 30.sp,
+                    color = Color.White,
                     fontWeight = FontWeight.Medium,
                     fontFamily = FontFamily(listOf(Font(R.font.montserrat_medium)))
                 )
@@ -128,6 +129,7 @@ fun WeatherContent(
                     Text(
                         text = temperature,
                         fontSize = 70.sp,
+                        color = Color.White,
                         fontWeight = FontWeight.SemiBold,
                         fontFamily = FontFamily(listOf(Font(R.font.montserrat_semibold)))
                     )
