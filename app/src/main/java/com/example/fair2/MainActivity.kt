@@ -104,7 +104,7 @@ fun WeatherContent(
                     .fillMaxWidth(1f)
                     .background(
                         Color(0xFF9BB7F2).copy(0.7f),
-                        CircleShape
+                        shape = CircleShape
                     )
             )
             Column(
