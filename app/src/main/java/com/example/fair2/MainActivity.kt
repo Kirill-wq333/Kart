@@ -1,5 +1,6 @@
 package com.example.fair2
 
+import android.graphics.Paint
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.os.DeadObjectException
@@ -22,6 +23,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,12 +37,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             Fair2Theme {
-                val selectedItem = remember {
-                    mutableStateOf("Самара")
-                }
                 WeatherContent(
                     temperature = "31",
                     nameWeather = "Облачно",
+                )
+                BootScreen()
+                Error(
+                    link = "retrofit.NetworkException: host http://weather.com/ could not be resolved",
+                    error = "Ошибка"
                 )
             }
         }
@@ -52,9 +56,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun WeatherContentPreview(){
     Surface(color = Color.White) {
-        val selectedItem = remember {
-            mutableStateOf("Самара")
-        }
       WeatherContent(
           temperature = "31",
           nameWeather = "Облачно",
@@ -64,10 +65,8 @@ fun WeatherContentPreview(){
 
 @Composable
 fun WeatherContent(
-
     temperature: String,
-    nameWeather: String,
-
+    nameWeather: String
 ) {
     val selectedItem = remember {
         mutableStateOf("Самара")
@@ -277,3 +276,82 @@ fun WeatherDetails(
     }
 }
 
+@Composable
+fun BootScreen(){
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                color = Color.White
+            ),
+            contentAlignment = Alignment.Center
+    ){
+        Image(
+            painter = painterResource(R.drawable.circular_determinate_progress_indicator),
+            contentDescription = null
+        )
+        Image(
+            painter = painterResource(R.drawable.circular_indeterminate_progress_indicator),
+            contentDescription = null
+        )
+    }
+}
+
+
+@Preview
+@Composable
+fun BootScreenPreview(){
+    BootScreen()
+}
+
+@Composable
+fun Error(
+    link: String,
+    error: String
+){
+      Box(
+        modifier = Modifier
+        .fillMaxSize()
+        .background(
+         color = Color.White
+      ),
+        contentAlignment = Alignment.Center
+    ){
+       Column(
+           modifier = Modifier
+               .padding(60.dp, 259.dp),
+            verticalArrangement = Arrangement.spacedBy(22.dp),
+           horizontalAlignment = Alignment.CenterHorizontally
+       ) {
+            Image(
+                painter = painterResource(R.drawable.alert),
+                contentDescription = null
+            )
+           Text(
+               modifier = Modifier
+                   .fillMaxWidth(),
+               text = error,
+               fontSize = 30.sp,
+               textAlign = TextAlign.Center,
+               fontWeight = FontWeight.SemiBold,
+               fontFamily = FontFamily(listOf(Font(R.font.montserrat_semibold)))
+           )
+           Text(
+               text = link,
+               fontSize = 16.sp,
+               textAlign = TextAlign.Center,
+               fontWeight = FontWeight.Medium,
+               fontFamily = FontFamily(listOf(Font(R.font.montserrat_medium)))
+           )
+       }
+     }
+}
+
+@Preview
+@Composable
+fun ErrorPreview(){
+    Error(
+        link = "retrofit.NetworkException: host http://weather.com/ could not be resolved",
+        error = "Ошибка"
+    )
+}
