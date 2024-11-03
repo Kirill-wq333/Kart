@@ -99,7 +99,7 @@ fun WeatherContent(
             Box(
                 modifier = Modifier
                     .blur(50.dp)
-                    .padding(50.dp)
+                    .padding(40.dp)
                     .fillMaxHeight(0.5f)
                     .fillMaxWidth(1f)
                     .background(
@@ -148,8 +148,8 @@ fun WeatherContent(
 }
 @Composable
 fun DetailsTextBlock(
-    title: String, // Заголовок
-    subtitle: String // Подзаголовок
+    title: String,
+    subtitle: String
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
