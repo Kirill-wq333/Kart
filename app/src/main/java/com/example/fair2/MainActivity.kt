@@ -41,11 +41,11 @@ class MainActivity : ComponentActivity() {
                     temperature = "31",
                     nameWeather = "Облачно",
                 )
-                BootScreen()
-                Error(
-                    link = "retrofit.NetworkException: host http://weather.com/ could not be resolved",
-                    error = "Ошибка"
-                )
+//                BootScreen()
+//                Error(
+//                    link = "retrofit.NetworkException: host http://weather.com/ could not be resolved",
+//                    error = "Ошибка"
+//                )
             }
         }
     }
