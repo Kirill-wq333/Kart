@@ -1,11 +1,19 @@
 package com.example.fair2
 
+import android.graphics.Canvas
 import android.graphics.Paint
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.os.DeadObjectException
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -16,6 +24,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
@@ -28,8 +37,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.fair2.ui.theme.Fair2Theme
+import com.example.fair2.ui.theme.WeatherApi
 import com.skydoves.cloudy.cloudy
 import kotlinx.coroutines.delay
+import retrofit2.Retrofit
 import java.util.*
 
 class MainActivity : ComponentActivity() {
@@ -51,6 +62,22 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@Composable
+private fun WeatherApp(){
+   val retrodit = remember {
+       Retrofit.Builder()
+
+   }
+
+//    val apiService = remember { retrodit.create(WeatherApi::class.java) }
+//
+//    LaunchedEffect(Unit){
+//        val data = retrodit.
+//    }0
+
+}
+
+
 
 @Preview
 @Composable
@@ -69,13 +96,13 @@ fun WeatherContent(
     nameWeather: String
 ) {
     val selectedItem = remember {
-        mutableStateOf("Самара")
+        mutableStateOf("Тольятти")
     }
     Scaffold(
         topBar = {
            City(
                selectedItem = selectedItem.value,
-               items = listOf("Самара", "Москва", "Владивосток"),
+               items = listOf("Тольятти", "Москва", "Владивосток"),
                onSelect = { selectedItem.value = it }
            )
         },
@@ -286,13 +313,10 @@ fun BootScreen(){
             ),
             contentAlignment = Alignment.Center
     ){
-        Image(
-            painter = painterResource(R.drawable.circular_determinate_progress_indicator),
-            contentDescription = null
-        )
-        Image(
-            painter = painterResource(R.drawable.circular_indeterminate_progress_indicator),
-            contentDescription = null
+        CircularProgressIndicator(
+            modifier = Modifier
+                .size(58.dp),
+            color = Color(0xFF9BB7F2)
         )
     }
 }
@@ -355,3 +379,4 @@ fun ErrorPreview(){
         error = "Ошибка"
     )
 }
+
