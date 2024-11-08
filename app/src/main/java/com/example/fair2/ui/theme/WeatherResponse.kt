@@ -5,8 +5,15 @@ data class WeatherResponse(
     val current: CurrentWeatherResponse
 )
 data class WeatherLocationResponse(
-    val f: Int
+    val localtime: String
 )
 data class CurrentWeatherResponse(
-val double: Double
+    val temp_c : Number,
+    val condition : WeatherConditionResponse,
+    val wind_kph : Number,
+    val pressure_mb: Number,
+    val humidity: Int
+)
+data class WeatherConditionResponse(
+    val text: String
 )

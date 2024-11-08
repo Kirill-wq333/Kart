@@ -1,6 +1,7 @@
 package com.example.fair2
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -23,7 +24,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.fair2.ui.theme.Fair2Theme
+import com.example.fair2.ui.theme.WeatherApi
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 
 class MainActivity : ComponentActivity() {
@@ -46,19 +49,24 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-private fun WeatherApp(){
-   val retrodit = remember {
-       Retrofit.Builder()
-
-   }
-
-//    val apiService = remember { retrodit.create(WeatherApi::class.java) }
-//
-//    LaunchedEffect(Unit){
-//        val data = retrodit.
-//    }0
-
+fun WeatherApp() {
+    val retrofit = remember {
+        Retrofit.Builder()
+            .baseUrl("http://api.weatherapi.com/v1/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+    val weatherApi = remember {
+        retrofit.create(WeatherApi::class.java)
+    }
+    LaunchedEffect(Unit) {
+        val data = weatherApi.getWeatherData(city = "London")
+        Log.d("Data", "WeatherApp: $data ")
+        data.current
+    }
 }
+
+
 
 
 
