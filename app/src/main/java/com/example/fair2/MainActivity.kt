@@ -60,13 +60,11 @@ fun WeatherApp() {
         retrofit.create(WeatherApi::class.java)
     }
     LaunchedEffect(Unit) {
-        val data = weatherApi.getWeatherData(city = "London")
+        val data = weatherApi.getWeatherData(city = "Tolyatti")
         Log.d("Data", "WeatherApp: $data ")
         data.current
     }
 }
-
-
 
 
 
