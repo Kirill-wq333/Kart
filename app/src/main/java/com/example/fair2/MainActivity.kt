@@ -40,6 +40,8 @@ class MainActivity : ComponentActivity() {
                     data1 =
                 )
                 WeatherApp()
+                WeatherApp1()
+                WeatherApp2()
 //                BootScreen()
 //                Error(
 //                    link = "retrofit.NetworkException: host http://weather.com/ could not be resolved",
@@ -68,6 +70,41 @@ fun WeatherApp() {
     }
 }
 
+@Composable
+fun WeatherApp1() {
+    val retrofit = remember {
+        Retrofit.Builder()
+            .baseUrl("http://api.weatherapi.com/v1/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+    val weatherApi = remember {
+        retrofit.create(WeatherApi::class.java)
+    }
+    LaunchedEffect(Unit) {
+        val data = weatherApi.getWeatherData(city = "Moscow")
+        Log.d("Data", "WeatherApp: $data ")
+        data.current
+    }
+}
+
+@Composable
+fun WeatherApp2() {
+    val retrofit = remember {
+        Retrofit.Builder()
+            .baseUrl("http://api.weatherapi.com/v1/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+    val weatherApi = remember {
+        retrofit.create(WeatherApi::class.java)
+    }
+    LaunchedEffect(Unit) {
+        val data = weatherApi.getWeatherData(city = "Vladivostok")
+        Log.d("Data", "WeatherApp: $data ")
+        data.current
+    }
+}
 
 
 @Preview
