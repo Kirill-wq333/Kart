@@ -23,8 +23,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.fair2.ui.theme.CurrentWeatherResponse
 import com.example.fair2.ui.theme.Fair2Theme
 import com.example.fair2.ui.theme.WeatherApi
+import com.example.fair2.ui.theme.WeatherLocationResponse
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -35,9 +37,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             Fair2Theme {
                 WeatherContent(
-                    temperature = "31",
-                    nameWeather = "Облачно",
+                    data1 =
                 )
+                WeatherApp()
 //                BootScreen()
 //                Error(
 //                    link = "retrofit.NetworkException: host http://weather.com/ could not be resolved",
@@ -73,16 +75,14 @@ fun WeatherApp() {
 fun WeatherContentPreview(){
     Surface(color = Color.White) {
       WeatherContent(
-          temperature = "31",
-          nameWeather = "Облачно",
+          data1 =
       )
     }
 }
 
 @Composable
 fun WeatherContent(
-    temperature: String,
-    nameWeather: String
+    data1: CurrentWeatherResponse
 ) {
     val selectedItem = remember {
         mutableStateOf("Тольятти")
@@ -98,10 +98,8 @@ fun WeatherContent(
 
         bottomBar = {
             WeatherDetails(
-                localTime = "8:14",
-                windSpeed = 4.5,
-                airPressure = 759,
-                humidity = 42
+               data1 = ,
+                data =
             )
         }
     ) {
@@ -132,7 +130,7 @@ fun WeatherContent(
                     contentDescription = null
                 )
                 Text(
-                    text = nameWeather,
+                    text = "${data1.condition}",
                     fontSize = 30.sp,
                     color = Color.White,
                     fontWeight = FontWeight.Medium,
@@ -145,7 +143,7 @@ fun WeatherContent(
                     horizontalArrangement = Arrangement.Start
                 ) {
                     Text(
-                        text = temperature,
+                        text = "${data1.temp_c}",
                         fontSize = 70.sp,
                         color = Color.White,
                         fontWeight = FontWeight.SemiBold,
@@ -251,10 +249,8 @@ fun City(
 
 @Composable
 fun WeatherDetails(
-    localTime: String,
-    windSpeed: Double,
-    airPressure: Int,
-    humidity: Int,
+    data: WeatherLocationResponse,
+    data1: CurrentWeatherResponse
 ){
     Box(
         modifier = Modifier
@@ -274,19 +270,19 @@ fun WeatherDetails(
         ) {
             DetailsTextBlock(
                 title = "Время",
-                subtitle = "$localTime"
+                subtitle = data.localtime
             )
             DetailsTextBlock(
                 title = "Ск. ветра",
-                subtitle = "$windSpeed М/С"
+                subtitle = "${data1.wind_kph} М/С"
             )
             DetailsTextBlock(
                 title = "Давление",
-                subtitle = "$airPressure мм."
+                subtitle = "${data1.pressure_mb} мм."
             )
             DetailsTextBlock(
                 title = "Влажность",
-                subtitle = "$humidity %"
+                subtitle = "${data1.humidity} %"
             )
         }
     }
