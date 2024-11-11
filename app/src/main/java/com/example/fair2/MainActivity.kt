@@ -119,7 +119,7 @@ fun WeatherContentPreview(){
 
 @Composable
 fun WeatherContent(
-    data1: CurrentWeatherResponse
+    data1: CurrentWeatherResponse,
 ) {
     val selectedItem = remember {
         mutableStateOf("Тольятти")
