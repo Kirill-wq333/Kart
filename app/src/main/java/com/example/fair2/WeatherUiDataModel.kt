@@ -30,6 +30,7 @@ fun WeatherResponse.toUiDataModel(): WeatherUiDataModel {
 private fun Int.getConditionImage(): Int {
     return when(this) {
         1000 -> R.drawable.clear_day
+        1003 -> R.drawable.partly_cloudy_day
         1006 -> R.drawable.cloudy
         1009 -> R.drawable.overcast
         1135 -> R.drawable.fog
@@ -39,7 +40,8 @@ private fun Int.getConditionImage(): Int {
         1225 -> R.drawable.heavy_snow
         1240 -> R.drawable.showers
         1264 -> R.drawable.heavy_showers
+        1273 -> R.drawable.thunderstorm_showers
         1279 -> R.drawable.thunderstorm_snow
-        else -> R.drawable.thunderstorm_showers
+        else -> R.drawable.windy
     }
 }
