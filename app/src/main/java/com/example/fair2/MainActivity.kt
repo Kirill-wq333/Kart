@@ -63,7 +63,7 @@ fun WeatherApp() {
     LaunchedEffect(Unit) {
         try {
             isLoading = true
-            val data = weatherApi.getWeatherData(city = selectedCity).toUimodel()
+            val data = weatherApi.getWeatherData(city = selectedCity).toUiDataModel()
             serverData = data
             isLoading = false
         } catch (e: Exception) {
@@ -85,7 +85,8 @@ fun WeatherApp() {
                     airPressure = it.airPressure,
                     windSpeed = it.windSpeed,
                     onSelectCity = { selectedCity = it },
-                    city = selectedCity
+                    city = selectedCity,
+                    day = it.conditionIconResId
                 )
             }
         }
@@ -101,6 +102,7 @@ fun WeatherContent(
     temperature: Double,
     humidity: Int,
     condition: String,
+    day: Int,
     localTime: String,
     airPressure: Double,
     windSpeed: Double,
@@ -147,7 +149,7 @@ fun WeatherContent(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.partly_cloudy_day),
+                    painter = painterResource(day),
                     contentDescription = null
                 )
                 Text(
