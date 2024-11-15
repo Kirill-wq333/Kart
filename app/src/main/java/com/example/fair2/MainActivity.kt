@@ -60,7 +60,7 @@ fun WeatherApp() {
 
     var selectedCity by remember { mutableStateOf("Тольятти") }
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(key1 = selectedCity) {
         try {
             isLoading = true
             val data = weatherApi.getWeatherData(city = selectedCity).toUiDataModel()
