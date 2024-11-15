@@ -1,14 +1,14 @@
 package com.example.fair2.ui.theme
 
-import androidx.contentpager.content.Query
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 
 interface WeatherApi {
     @GET("current.json")
     suspend fun getWeatherData(
-        @retrofit2.http.Query("key") key: String = "9758adcdd9f4497a868130048240811",
-        @retrofit2.http.Query("q") city: String,
-        @retrofit2.http.Query("aqi") aqi: String = "no"
+        @Query("key") key: String = "9758adcdd9f4497a868130048240811",
+        @Query("q") city: String,
+        @Query("lang") language: String = "ru"
     ):WeatherResponse
 }

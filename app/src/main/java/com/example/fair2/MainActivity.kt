@@ -36,17 +36,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             Fair2Theme {
-                WeatherContent(
-                    data1 =
-                )
                 WeatherApp()
-                WeatherApp1()
-                WeatherApp2()
-//                BootScreen()
-//                Error(
-//                    link = "retrofit.NetworkException: host http://weather.com/ could not be resolved",
-//                    error = "Ошибка"
-//                )
             }
         }
     }
@@ -60,83 +50,77 @@ fun WeatherApp() {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
-    val weatherApi = remember {
-        retrofit.create(WeatherApi::class.java)
-    }
+    val weatherApi = remember { retrofit.create(WeatherApi::class.java) }
+
+    var isLoading by remember { mutableStateOf(false) }
+    var isError by remember { mutableStateOf(false) }
+
+    var serverData by remember { mutableStateOf<WeatherUiDataModel?>(null) }
+    var errorMessage by remember { mutableStateOf("") }
+
+    var selectedCity by remember { mutableStateOf("Тольятти") }
+
     LaunchedEffect(Unit) {
-        val data = weatherApi.getWeatherData(city = "Tolyatti")
-        Log.d("Data", "WeatherApp: $data ")
-        data.current
+        try {
+            isLoading = true
+            val data = weatherApi.getWeatherData(city = selectedCity).toUimodel()
+            serverData = data
+            isLoading = false
+        } catch (e: Exception) {
+            isError = true
+            isLoading = false
+            errorMessage = e.message ?: "Ошибка"
+        }
     }
-}
-
-@Composable
-fun WeatherApp1() {
-    val retrofit = remember {
-        Retrofit.Builder()
-            .baseUrl("http://api.weatherapi.com/v1/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
-    val weatherApi = remember {
-        retrofit.create(WeatherApi::class.java)
-    }
-    LaunchedEffect(Unit) {
-        val data = weatherApi.getWeatherData(city = "Moscow")
-        Log.d("Data", "WeatherApp: $data ")
-        data.current
-    }
-}
-
-@Composable
-fun WeatherApp2() {
-    val retrofit = remember {
-        Retrofit.Builder()
-            .baseUrl("http://api.weatherapi.com/v1/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
-    val weatherApi = remember {
-        retrofit.create(WeatherApi::class.java)
-    }
-    LaunchedEffect(Unit) {
-        val data = weatherApi.getWeatherData(city = "Vladivostok")
-        Log.d("Data", "WeatherApp: $data ")
-        data.current
+    when{
+        isLoading -> { BootScreen() }
+        isError -> { ErrorPreview() }
+        else -> {
+            serverData?.let { it ->
+                WeatherContent(
+                    temperature = it.temperature,
+                    humidity = it.humidity,
+                    condition = it.condition,
+                    localTime = it.localTime,
+                    airPressure = it.airPressure,
+                    windSpeed = it.windSpeed,
+                    onSelectCity = { selectedCity = it },
+                    city = selectedCity
+                )
+            }
+        }
     }
 }
 
 
-@Preview
-@Composable
-fun WeatherContentPreview(){
-    Surface(color = Color.White) {
-      WeatherContent(
-          data1 =
-      )
-    }
-}
+
 
 @Composable
 fun WeatherContent(
-    data1: CurrentWeatherResponse,
+    city: String,
+    temperature: Double,
+    humidity: Int,
+    condition: String,
+    localTime: String,
+    airPressure: Double,
+    windSpeed: Double,
+    onSelectCity: (String) -> Unit
 ) {
-    val selectedItem = remember {
-        mutableStateOf("Тольятти")
-    }
     Scaffold(
         topBar = {
-           City(
-               selectedItem = selectedItem.value,
-               items = listOf("Тольятти", "Москва", "Владивосток"),
-               onSelect = { selectedItem.value = it }
-           )
+            City(
+                selectedItem = city,
+                items = listOf("Тольятти", "Москва", "Владивосток"),
+                onSelect = onSelectCity
+            )
         },
 
         bottomBar = {
             WeatherDetails(
-               data1 = ,
-                data =
+                humidity = humidity,
+                localTime = localTime,
+                airPressure = airPressure,
+                windSpeed = windSpeed
             )
         }
     ) {
@@ -167,7 +151,7 @@ fun WeatherContent(
                     contentDescription = null
                 )
                 Text(
-                    text = "${data1.condition}",
+                    text = condition,
                     fontSize = 30.sp,
                     color = Color.White,
                     fontWeight = FontWeight.Medium,
@@ -180,7 +164,7 @@ fun WeatherContent(
                     horizontalArrangement = Arrangement.Start
                 ) {
                     Text(
-                        text = "${data1.temp_c}",
+                        text = "$temperature",
                         fontSize = 70.sp,
                         color = Color.White,
                         fontWeight = FontWeight.SemiBold,
@@ -286,8 +270,10 @@ fun City(
 
 @Composable
 fun WeatherDetails(
-    data: WeatherLocationResponse,
-    data1: CurrentWeatherResponse
+    localTime: String,
+    windSpeed: Double,
+    airPressure: Double,
+    humidity: Int
 ){
     Box(
         modifier = Modifier
@@ -307,19 +293,19 @@ fun WeatherDetails(
         ) {
             DetailsTextBlock(
                 title = "Время",
-                subtitle = data.localtime
+                subtitle = localTime
             )
             DetailsTextBlock(
                 title = "Ск. ветра",
-                subtitle = "${data1.wind_kph} М/С"
+                subtitle = "$windSpeed М/С"
             )
             DetailsTextBlock(
                 title = "Давление",
-                subtitle = "${data1.pressure_mb} мм."
+                subtitle = "$airPressure мм."
             )
             DetailsTextBlock(
                 title = "Влажность",
-                subtitle = "${data1.humidity} %"
+                subtitle = "$humidity %"
             )
         }
     }
@@ -333,7 +319,7 @@ fun BootScreen(){
             .background(
                 color = Color.White
             ),
-            contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center
     ){
         CircularProgressIndicator(
             modifier = Modifier
@@ -344,53 +330,47 @@ fun BootScreen(){
 }
 
 
-@Preview
-@Composable
-fun BootScreenPreview(){
-    BootScreen()
-}
-
 @Composable
 fun Error(
     link: String,
     error: String
 ){
-      Box(
+    Box(
         modifier = Modifier
-        .fillMaxSize()
-        .background(
-         color = Color.White
-      ),
+            .fillMaxSize()
+            .background(
+                color = Color.White
+            ),
         contentAlignment = Alignment.Center
     ){
-       Column(
-           modifier = Modifier
-               .padding(60.dp, 259.dp),
+        Column(
+            modifier = Modifier
+                .padding(60.dp, 259.dp),
             verticalArrangement = Arrangement.spacedBy(22.dp),
-           horizontalAlignment = Alignment.CenterHorizontally
-       ) {
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Image(
                 painter = painterResource(R.drawable.alert),
                 contentDescription = null
             )
-           Text(
-               modifier = Modifier
-                   .fillMaxWidth(),
-               text = error,
-               fontSize = 30.sp,
-               textAlign = TextAlign.Center,
-               fontWeight = FontWeight.SemiBold,
-               fontFamily = FontFamily(listOf(Font(R.font.montserrat_semibold)))
-           )
-           Text(
-               text = link,
-               fontSize = 16.sp,
-               textAlign = TextAlign.Center,
-               fontWeight = FontWeight.Medium,
-               fontFamily = FontFamily(listOf(Font(R.font.montserrat_medium)))
-           )
-       }
-     }
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                text = error,
+                fontSize = 30.sp,
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.SemiBold,
+                fontFamily = FontFamily(listOf(Font(R.font.montserrat_semibold)))
+            )
+            Text(
+                text = link,
+                fontSize = 16.sp,
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Medium,
+                fontFamily = FontFamily(listOf(Font(R.font.montserrat_medium)))
+            )
+        }
+    }
 }
 
 @Preview
