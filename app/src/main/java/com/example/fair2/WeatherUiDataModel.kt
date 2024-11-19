@@ -15,7 +15,6 @@ data class WeatherUiDataModel(
 )
 
 fun WeatherResponse.toUiDataModel(): WeatherUiDataModel {
-
     return WeatherUiDataModel(
         condition = this.current.condition.text,
         conditionIconResId = this.current.condition.code.getConditionImage(),
